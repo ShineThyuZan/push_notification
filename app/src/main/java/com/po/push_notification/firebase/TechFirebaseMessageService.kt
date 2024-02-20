@@ -7,7 +7,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.po.push_notification.dataStore
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -27,17 +26,15 @@ class TechFirebaseMessageService : FirebaseMessagingService() {
             Log.d("CloudMessage.Title", "Notification ${message.notification!!.title}")
             Log.d("CloudMessage.Body", "Notification ${message.notification!!.body}")
         }
-
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+        Log.d("token.tfms",token)
         GlobalScope.launch {
             saveGcmToken(token)
         }
     }
-
     // Save GCM token DataStore Preference
     // You can use to sent it to your server
     @SuppressLint("SuspiciousIndentation")
@@ -46,7 +43,5 @@ class TechFirebaseMessageService : FirebaseMessagingService() {
             baseContext.dataStore.edit { pref ->
                 pref[gcmTokenKey] = token
             }
-
     }
-
 }
